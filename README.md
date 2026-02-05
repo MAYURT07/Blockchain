@@ -1,62 +1,80 @@
-# Blockchain (Beginner-Friendly)
+# SafeTx – Smart Contract Safety System
 
-This repository gives you a **very simple** idea of how a blockchain works.
+SafeTx is a beginner-friendly security layer that helps users spot common blockchain transaction risks **before** they click confirm.
 
-## What is a blockchain?
+## Problem Statement
+Every day, users sign transactions they do not fully understand. Many scams look like normal wallet prompts, but actually request dangerous permissions (for example, unlimited token approvals).
 
-Think of a blockchain like a notebook:
+Most people do not read raw contract data, function signatures, or network IDs. SafeTx converts technical transaction details into simple, human warnings.
 
-- Each page is a **block**.
-- Each page stores some data.
-- Every page also stores the fingerprint (hash) of the page before it.
-- If someone changes an old page, fingerprints no longer match, so we know something was changed.
+## Why Blockchain Transactions Are Irreversible
+On Ethereum and similar blockchains:
 
-That is the core idea: **linked blocks + tamper detection**.
+- Confirmed transactions are final.
+- There is no "undo" button.
+- If tokens are sent to the wrong address or stolen via malicious approval, recovery is very difficult.
 
-## Super small example (Python)
+That is why a **pre-send safety check** is critical.
 
-```python
-import hashlib
-import json
+## How SafeTx Protects Users
+SafeTx performs a lightweight safety pass in the browser:
 
+1. Validates wallet addresses.
+2. Detects the wallet's currently connected network.
+3. Compares selected network vs wallet network to prevent chain mistakes.
+4. Flags dangerous action patterns (unlimited approvals, transferFrom risk, suspicious signatures).
+5. Displays clear status as a traffic light:
+   - Green = Safe
+   - Yellow = Warning
+   - Red = Danger
 
-def make_hash(data):
-    text = json.dumps(data, sort_keys=True).encode()
-    return hashlib.sha256(text).hexdigest()
+## Features
+- Traffic-light style safety UI (simple and beginner-friendly).
+- Ethereum address validation with `ethers.js`.
+- Wallet network detection via injected wallet provider.
+- Network mismatch warning.
+- Educational risk analysis for:
+  - Unlimited token approval
+  - `transferFrom` risk
+  - Unknown/suspicious function signatures
+- Testnet-only Solidity demo contract showing safe vs dangerous approvals.
 
+## Tech Stack
+- Frontend: HTML, CSS, JavaScript
+- Web3 library: `ethers.js` (v6 via CDN)
+- Smart contract: Solidity `^0.8.20`
+- Target environment: Ethereum testnet (recommended: Sepolia)
 
-def new_block(index, data, previous_hash):
-    block = {
-        "index": index,
-        "data": data,
-        "previous_hash": previous_hash,
-    }
-    block["hash"] = make_hash(block)
-    return block
-
-
-# Genesis block (first block)
-chain = [new_block(0, "Genesis", "0")]
-
-# Add one block
-chain.append(new_block(1, "Alice pays Bob 5", chain[-1]["hash"]))
-
-print(chain)
+## Project Structure
+```text
+frontend/
+  index.html
+  styles.css
+  app.js
+contracts/
+  SafeApprovalDemo.sol
+docs/
+  BEGINNER_EXPLANATION.md
+README.md
 ```
 
-## What to notice in the code
+## How to Run Locally
+1. Clone repository.
+2. Open `frontend/index.html` in a browser.
+3. Install and unlock MetaMask (or compatible wallet).
+4. Switch wallet to the network you want (for example Sepolia).
+5. Enter a wallet address and choose network.
+6. Click **Check Before Sending**.
 
-- `previous_hash` links one block to the block before it.
-- `hash` acts like a fingerprint for the block content.
-- If block data changes, the hash changes.
+> Note: This MVP is educational. It demonstrates core checks, not full production-grade security.
 
-## Important beginner note
+## Future Improvements
+- Decode real pending transaction calldata directly from wallet prompts.
+- Add known malicious contract list integration.
+- Add simulation engine for transaction outcomes.
+- Add scoring model with explainable risk factors.
+- Add backend alerts + reputation feeds.
+- Add unit/integration tests and CI pipeline.
 
-Real blockchains are much more complex:
-
-- peer-to-peer networking
-- digital signatures
-- consensus rules
-- mining or validators
-
-But this mini example helps you understand the **foundation** first.
+---
+Built for safer transaction decisions, better onboarding, and security-first Web3 UX.

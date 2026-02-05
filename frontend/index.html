@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SafeTx - Safety Checker</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <h1>SafeTx Safety Checker</h1>
+      <p class="subtitle">Check before you send money on blockchain.</p>
+
+      <div class="traffic-light" aria-label="Safety status light">
+        <div id="light-safe" class="light safe"></div>
+        <div id="light-warning" class="light warning"></div>
+        <div id="light-danger" class="light danger"></div>
+      </div>
+
+      <label for="walletAddress">Wallet address</label>
+      <input
+        id="walletAddress"
+        type="text"
+        placeholder="0x..."
+        autocomplete="off"
+      />
+
+      <label for="networkSelect">Network selector</label>
+      <select id="networkSelect">
+        <option value="11155111">Ethereum Sepolia</option>
+        <option value="1">Ethereum Mainnet</option>
+      </select>
+
+      <button id="checkButton" type="button">Check Before Sending</button>
+
+      <section class="result-box">
+        <p id="resultMessage">Enter details, then press the button.</p>
+        <p id="riskMessage" class="risk-message"></p>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

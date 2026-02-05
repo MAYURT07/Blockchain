@@ -1,0 +1,111 @@
+:root {
+  --safe: #2ecc71;
+  --warning: #f1c40f;
+  --danger: #e74c3c;
+  --bg: #f6f8fb;
+  --text: #1f2937;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  width: min(92vw, 460px);
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.4rem;
+}
+
+.subtitle {
+  margin-top: -4px;
+  color: #4b5563;
+}
+
+.traffic-light {
+  margin: 16px 0;
+  display: flex;
+  gap: 10px;
+}
+
+.light {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  opacity: 0.25;
+  border: 2px solid #d1d5db;
+}
+
+.safe {
+  background: var(--safe);
+}
+
+.warning {
+  background: var(--warning);
+}
+
+.danger {
+  background: var(--danger);
+}
+
+.light.active {
+  opacity: 1;
+  border-color: #111827;
+}
+
+label {
+  display: block;
+  margin: 10px 0 6px;
+  font-weight: 600;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 14px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.result-box {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.risk-message {
+  margin-top: 8px;
+  color: #374151;
+}
