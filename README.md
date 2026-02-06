@@ -1,6 +1,6 @@
 # SafeTx – Smart Contract Safety System
 
-SafeTx is a beginner-friendly security layer that helps users spot common blockchain transaction risks **before** they click confirm
+SafeTx is a beginner-friendly security layer that helps users spot common blockchain transaction risks **before** they click confirm.
 
 ## Problem Statement
 Every day, users sign transactions they do not fully understand. Many scams look like normal wallet prompts, but actually request dangerous permissions (for example, unlimited token approvals).
