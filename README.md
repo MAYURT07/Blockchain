@@ -29,11 +29,11 @@ SafeTx performs a lightweight safety pass in the browser:
    - Red = Danger
 
 ## Features
-- Traffic-light style safety UI (simple and beginner-friendly).
+- Modernized traffic-light safety UI (simple and beginner-friendly).
 - Ethereum address validation with `ethers.js`.
 - Wallet network detection via injected wallet provider.
 - Network mismatch warning.
-- Educational risk analysis for:
+- Educational risk analysis with selectable risk models (Beginner, Balanced, Strict) for:
   - Unlimited token approval
   - `transferFrom` risk
   - Unknown/suspicious function signatures

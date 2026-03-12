@@ -1,6 +1,8 @@
 const checkButton = document.getElementById("checkButton");
 const walletAddressInput = document.getElementById("walletAddress");
 const networkSelect = document.getElementById("networkSelect");
+const modelSelect = document.getElementById("modelSelect");
+const actionSelect = document.getElementById("actionSelect");
 const resultMessage = document.getElementById("resultMessage");
 const riskMessage = document.getElementById("riskMessage");
 
@@ -11,6 +13,27 @@ const lightDanger = document.getElementById("light-danger");
 const SIG_APPROVE = "0x095ea7b3";
 const SIG_TRANSFER_FROM = "0x23b872dd";
 const MAX_UINT256 = (2n ** 256n) - 1n;
+
+const RISK_MODELS = {
+  beginner: {
+    name: "Beginner mode",
+    unknownLevel: "WARNING",
+    transferFromLevel: "WARNING",
+    unlimitedApprovalLevel: "WARNING",
+  },
+  balanced: {
+    name: "Balanced",
+    unknownLevel: "WARNING",
+    transferFromLevel: "WARNING",
+    unlimitedApprovalLevel: "DANGER",
+  },
+  strict: {
+    name: "Strict",
+    unknownLevel: "DANGER",
+    transferFromLevel: "DANGER",
+    unlimitedApprovalLevel: "DANGER",
+  },
+};
 
 function setLight(status) {
   lightSafe.classList.remove("active");
@@ -37,12 +60,29 @@ async function getWalletNetworkChainId() {
   return Number(network.chainId);
 }
 
-function analyzeDangerousAction(action) {
+function getActionFromSelection(actionKey) {
+  if (actionKey === "unlimited_approve") {
+    return { functionSignature: SIG_APPROVE, amount: MAX_UINT256 };
+  }
+
+  if (actionKey === "limited_approve") {
+    return { functionSignature: SIG_APPROVE, amount: 1000n };
+  }
+
+  if (actionKey === "transfer_from") {
+    return { functionSignature: SIG_TRANSFER_FROM };
+  }
+
+  return { functionSignature: "0xdeadbeef" };
+}
+
+function analyzeDangerousAction(action, modelKey) {
+  const model = RISK_MODELS[modelKey] ?? RISK_MODELS.balanced;
   const { functionSignature, amount } = action;
 
   if (functionSignature === SIG_TRANSFER_FROM) {
     return {
-      level: "WARNING",
+      level: model.transferFromLevel,
       text: "This action can move tokens from someone else if permission exists.",
       childText: "Someone may pull coins using old permission. Be careful.",
     };
@@ -51,7 +91,7 @@ function analyzeDangerousAction(action) {
   if (functionSignature === SIG_APPROVE && typeof amount === "bigint") {
     if (amount === MAX_UINT256) {
       return {
-        level: "DANGER",
+        level: model.unlimitedApprovalLevel,
         text: "Unlimited token approval detected.",
         childText: "You are giving permission to take ALL your tokens.",
       };
@@ -66,7 +106,7 @@ function analyzeDangerousAction(action) {
 
   if (typeof functionSignature === "string" && functionSignature.startsWith("0x")) {
     return {
-      level: "WARNING",
+      level: model.unknownLevel,
       text: "Unknown or suspicious function signature.",
       childText: "This button does something we do not fully recognize.",
     };
@@ -100,21 +140,13 @@ checkButton.addEventListener("click", async () => {
       return;
     }
 
-    const demoRisk = analyzeDangerousAction({
-      functionSignature: SIG_APPROVE,
-      amount: MAX_UINT256,
-    });
+    const selectedModel = modelSelect.value;
+    const selectedAction = getActionFromSelection(actionSelect.value);
+    const risk = analyzeDangerousAction(selectedAction, selectedModel);
 
-    if (demoRisk.level === "DANGER") {
-      setLight("DANGER");
-      resultMessage.textContent = "⚠️ Dangerous contract action detected";
-      riskMessage.textContent = demoRisk.childText;
-      return;
-    }
-
-    setLight("SAFE");
-    resultMessage.textContent = "✅ Safe to proceed";
-    riskMessage.textContent = "Basic checks passed on address and network.";
+    setLight(risk.level);
+    resultMessage.textContent = `${RISK_MODELS[selectedModel].name}: ${risk.text}`;
+    riskMessage.textContent = risk.childText;
   } catch (error) {
     setLight("DANGER");
     resultMessage.textContent = "❌ Could not complete safety check";
@@ -124,6 +156,8 @@ checkButton.addEventListener("click", async () => {
 
 window.SafeTxEducation = {
   analyzeDangerousAction,
+  getActionFromSelection,
+  RISK_MODELS,
   SIG_APPROVE,
   SIG_TRANSFER_FROM,
   MAX_UINT256,

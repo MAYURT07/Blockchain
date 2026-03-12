@@ -9,7 +9,7 @@
   <body>
     <main class="card">
       <h1>SafeTx Safety Checker</h1>
-      <p class="subtitle">Check before you send money on blockchain.</p>
+      <p class="subtitle">Modern pre-send checks with a selectable risk model.</p>
 
       <div class="traffic-light" aria-label="Safety status light">
         <div id="light-safe" class="light safe"></div>
@@ -17,24 +17,49 @@
         <div id="light-danger" class="light danger"></div>
       </div>
 
-      <label for="walletAddress">Wallet address</label>
-      <input
-        id="walletAddress"
-        type="text"
-        placeholder="0x..."
-        autocomplete="off"
-      />
+      <div class="grid">
+        <div>
+          <label for="walletAddress">Wallet address</label>
+          <input
+            id="walletAddress"
+            type="text"
+            placeholder="0x..."
+            autocomplete="off"
+          />
+        </div>
 
-      <label for="networkSelect">Network selector</label>
-      <select id="networkSelect">
-        <option value="11155111">Ethereum Sepolia</option>
-        <option value="1">Ethereum Mainnet</option>
-      </select>
+        <div>
+          <label for="networkSelect">Network</label>
+          <select id="networkSelect">
+            <option value="11155111">Ethereum Sepolia</option>
+            <option value="1">Ethereum Mainnet</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="modelSelect">Risk model</label>
+          <select id="modelSelect">
+            <option value="balanced">Balanced (recommended)</option>
+            <option value="strict">Strict</option>
+            <option value="beginner">Beginner mode</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="actionSelect">Action to simulate</label>
+          <select id="actionSelect">
+            <option value="limited_approve">Approve limited amount</option>
+            <option value="unlimited_approve">Approve unlimited amount</option>
+            <option value="transfer_from">transferFrom call</option>
+            <option value="unknown_sig">Unknown signature</option>
+          </select>
+        </div>
+      </div>
 
       <button id="checkButton" type="button">Check Before Sending</button>
 
       <section class="result-box">
-        <p id="resultMessage">Enter details, then press the button.</p>
+        <p id="resultMessage">Enter details, select a model, then run the check.</p>
         <p id="riskMessage" class="risk-message"></p>
       </section>
     </main>
